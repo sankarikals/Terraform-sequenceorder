@@ -2,7 +2,7 @@
 
 set -e
 
-echo "🚀 Deploying server1 environment..."
+echo "🚀 Deploying server3 environment..."
 
 terraform init -reconfigure
 terraform plan
