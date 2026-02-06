@@ -29,7 +29,7 @@ module "security_group" {
   allowed_ports = var.allowed_ports
 
   tags = {
-    Environment = "server1"
+    Environment = "server4"
   }
 }
 
@@ -41,10 +41,10 @@ output "security_group_id" {
 module "iam_role_ssm" {
   source = "../../modules/iam-role"
 
-  name = "server1"
+  name = "server4"
 
   tags = {
-    Environment = "server1"
+    Environment = "server4"
   }
 }
 

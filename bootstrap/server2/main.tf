@@ -4,6 +4,6 @@ provider "aws" {
 
 module "s3_backend" {
   source      = "../../modules/s3-backend"
-  environment = "qa"
+  environment = "server2"
   account_id  = "530743905801"
 }
