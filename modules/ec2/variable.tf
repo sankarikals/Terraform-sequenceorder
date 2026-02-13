@@ -36,3 +36,7 @@ variable "user_data" {
   description = "User data script"
   type        = string
 }
+variable "associate_public_ip_address" {
+  type = bool
+  
+}

@@ -1,182 +1,104 @@
-🚀 Terraform Multi-Server Environment — Deployment Guide
-📌 Overview
+# Deployment — Multi-Environment Terraform Setup:
 
-This project provisions four independent AWS server environments using Terraform. Each server environment is isolated and includes:
+This project provisions four isolated servers using Terraform with different user-data configurations, while sharing a common VPC. Each server maintains its own IAM role, security group, and bootstrap configuration.
 
-Dedicated EC2 instance
+Terraform remote state is managed using AWS S3 with DynamoDB state locking to ensure safe concurrent operations.
 
-Dedicated security group
+The architecture allows:
 
-Dedicated IAM role
+Independent environment deployment
+Selective server creation
+Controlled server destruction
+Safe remote state management
 
-Dedicated user-data bootstrap configuration
+# Architecture Overview
 
-Independent Terraform backend state
+Shared VPC for all servers
+Server-specific IAM roles
+Dedicated security groups
+Unique user-data per server
+Remote Terraform state storage
+DynamoDB state locking
 
-Each environment can be:
+Each environment operates independently and can be created or destroyed without impacting others.
 
-✅ Created independently
-✅ Destroyed independently
-✅ Managed via automation scripts
+# Prerequisites
 
-This design allows selective lifecycle control without affecting other environments.
+Before running Terraform, ensure the following tools and configurations are completed:
 
-🏗 Architecture Concept
+Install Required Tools AWS CLI installed and configured Terraform installed Git installed
+Configure AWS credentials: aws configure
 
-We deploy four sequential server environments, each treated as an independent Terraform stack.
+Backend Configuration (One-Time Setup) Terraform remote state requires an S3 bucket and DynamoDB table.
+a) Create S3 Bucket (manual step)
 
-Server	Instance Type	Description
-server1	t2.micro	Lightweight workload
-server2	t2.medium	Medium workload
-server3	t2.micro	Lightweight workload
-server4	t2.medium	Medium workload
+Create an S3 bucket to store Terraform state files. Use a unique bucket name.
 
-Each server environment includes:
+terraform-state-terraformcicd
 
-Separate Terraform state backend
+b) Create DynamoDB Lock Table
 
-Dedicated networking/security
+This table prevents concurrent Terraform runs.
 
-Unique EC2 configuration
+aws dynamodb create-table
+--table-name terraform-lock-dev
+--attribute-definitions AttributeName=LockID,AttributeType=S
+--key-schema AttributeName=LockID,KeyType=HASH
+--billing-mode PAY_PER_REQUEST
+--region us-east-1
 
-Custom user-data initialization
+# Deploy Full Environment  :
 
-This guarantees safe, isolated infrastructure operations.
+Navigate to the respective environment directory before running Terraform.
 
+For enviornment:
 
-Project Structure
+1.Move to dev directory cd environments/dev
 
-Terraform-CICD/
-│
-├── modules/
-│   ├── vpc/
-│   ├── ec2/
-│   ├── security_group/
-│   └── iam-role/
-│
-├── bootstrap/
-│   ├── server1/
-│   ├── server2/
-│   ├── server3/
-│   └── server4/
-│
-├── environments/
-│   ├── server1/
-│   ├── server2/
-│   ├── server3/
-│   └── server4/
-│
-├── scripts/
-│   ├── backenddeploy.sh
-│   ├── deploy.sh
-│   └── destroy.sh
-│
-├── README.md
-└── .gitignore
+Initialize Terraform backend: terraform init -reconfigure
 
-⚙ Prerequisites
+Plan deployment:terraform plan -var-file="../../tfvars/dev.tfvars"
 
-Install the following tools before starting:
+Apply infrastructure:: terraform apply -var-file="../../tfvars/dev.tfvars"
 
-Required Tools
+# Destroy Full Enviornment :
 
-AWS CLI
+Destroy Dev Infrastructure terraform destroy -var-file="../../tfvars/dev.tfvars"
 
-Terraform
+# Deploy or Destroy Individual Server:
 
-Git
+You can target a specific server module without affecting others.
 
-Bash shell (Linux/macOS/Git Bash)
+Example — Server 1:
 
-AWS Configuration
+1.Move to dev directory cd environments/dev
 
-Configure credentials:
+Initialize Terraform backend: terraform init -reconfigure
 
-aws configure
+Plan deployment:terraform plan -target=module.server1 -var-file="../../tfvars/qa.tfvars"
 
+Apply infrastructure:: terraform apply -target=module.server1 -var-file="../../tfvars/qa.tfvars"
 
-Ensure your IAM user has permissions for:
+To destroy :
 
-EC2
+Destroy Dev Infrastructure terraform destroy -target=module.server1 -var-file="../../tfvars/qa.tfvars"
 
-S3
+Note: Targeted operations affect only the specified server module. Shared infrastructure such as the VPC remains untouched.
 
-IAM
+If you want to down the complete infra then follow Destroy Full Enviornment.  <<terraform destroy -var-file="../../tfvars/qa.tfvars" >>
 
-VPC
+# Best Practices :
 
-DynamoDB
+Always re-initialize Terraform after backend changes
+Use environment-specific tfvars files
+Use targeted destroy cautiously
+Enable state locking for team safety
 
-Step 1 — Backend Bootstrap (One-Time Setup)
+# Result
 
-Each server requires a dedicated Terraform remote backend.
+You now have:
 
-Run:
-
-./backenddeploy.sh server1
-
-
-You can replace server1 with:
-
-server2
-server3
-server4
-
-What this step creates
-
-S3 bucket for Terraform state
-
-DynamoDB table for state locking
-
-⚠ This step is required only once per environment.
-
-Step 2 — Deploy Server Infrastructure
-
-After backend setup:
-
-./deploy.sh server1
-
-
-Terraform provisions:
-
-VPC
-
-Security group
-
-IAM role
-
-EC2 instance
-
-User-data configuration
-
-Each server environment runs independently.
-
-Step 3 — Destroy Specific Server Environment
-
-To destroy a single environment:
-
-./destroy.sh server3
-
-This removes only server3 infrastructure.
-
-
-Other servers remain untouched.
-
-Selective Lifecycle Examples
-Deploy server2 only
-./backenddeploy.sh server2
-./deploy.sh server2
-
-Destroy server1 only
-./destroy.sh server1
-
-🔄 Deployment Workflow
-Backend Bootstrap → Deploy → Destroy (optional)
-
-
-Flow:
-
-backenddeploy.sh → deploy.sh → destroy.sh
-
-
-Each environment maintains independent state and lifecycle.
+Multi-environment Terraform deployment
+Isolated server lifecycle control
+Safe remote state management
+Flexible infrastructure orchestration
