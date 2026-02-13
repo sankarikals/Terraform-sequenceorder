@@ -43,6 +43,7 @@ Custom user-data initialization
 
 This guarantees safe, isolated infrastructure operations.
 
+
 Project Structure
 
 Terraform-CICD/
