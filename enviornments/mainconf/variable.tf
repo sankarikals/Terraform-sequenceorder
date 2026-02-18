@@ -157,3 +157,22 @@ variable "user_data" {
   default = ""
   
 }
+
+# servertags
+
+variable "server1_tags" {
+  type = map(string)
+  
+}
+variable "server2_tags" {
+  type = map(string)
+  
+}
+variable "server3_tags" {
+  type = map(string)
+  
+}
+variable "server4_tags" {
+  type = map(string)
+  
+}

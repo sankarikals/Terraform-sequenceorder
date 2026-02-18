@@ -54,3 +54,29 @@ server1_allowed_ports = [22, 80, 443]
 server2_allowed_ports = [22, 80, 443]
 server3_allowed_ports = [22, 80, 443]
 server4_allowed_ports = [22, 80, 443]
+
+# server tags
+
+server1_tags = {
+    Name = "dev-server1-ec2"
+    environment = "dev"
+    Dependency  = "Initial"
+}
+
+server2_tags = {
+    Name = "dev-server2-ec2"
+    environment = "dev"
+    Dependency  = "Depends on server1"
+}
+
+server3_tags = {
+    Name = "dev-server3-ec2"
+    environment = "dev"
+    Dependency  = "Depends on server2"
+}
+
+server4_tags = {
+    Name = "dev-server4-ec2"
+    environment = "dev"
+    Dependency  = "Depends on server3"
+}

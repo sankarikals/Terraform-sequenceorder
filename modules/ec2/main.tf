@@ -33,8 +33,5 @@ resource "aws_instance" "this" {
 
   user_data = var.user_data
 
-  tags = merge({
-    Name        = "${var.name}-ec2"
-    Environment = var.environment
-  }, var.tags)
+  tags = var.tags
 }

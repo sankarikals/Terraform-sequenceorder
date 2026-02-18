@@ -42,6 +42,7 @@ module "server1" {
   instance_type     = var.server1_instance_type
   subnet_id         = module.vpc.public_subnet_ids[0]
   security_group_id = module.sg_server1.security_group_id
+  tags = var.server1_tags
   iam_instance_profile = module.iam_server1.instance_profile_name
   user_data = templatefile("${path.module}/../../userdata/server1.tftpl", {
     environment = var.environment
@@ -81,6 +82,7 @@ module "server2" {
   instance_type     = var.server2_instance_type
   subnet_id         = module.vpc.public_subnet_ids[0]
   security_group_id = module.sg_server2.security_group_id
+  tags = var.server2_tags
   iam_instance_profile = module.iam_server2.instance_profile_name
   user_data = templatefile("${path.module}/../../userdata/server2.tftpl", {
     environment = var.environment
@@ -119,6 +121,7 @@ module "server3" {
   instance_type     = var.server3_instance_type
   subnet_id         = module.vpc.public_subnet_ids[1]
   security_group_id = module.sg_server3.security_group_id
+  tags = var.server3_tags
   iam_instance_profile = module.iam_server3.instance_profile_name
   user_data = templatefile("${path.module}/../../userdata/server3.tftpl", {
     environment = var.environment
@@ -159,6 +162,7 @@ module "server4" {
   instance_type     = var.server4_instance_type
   subnet_id         = module.vpc.public_subnet_ids[1]
   security_group_id = module.sg_server4.security_group_id
+  tags = var.server4_tags
   iam_instance_profile = module.iam_server4.instance_profile_name
   user_data = templatefile("${path.module}/../../userdata/server4.tftpl", {
     environment = var.environment
