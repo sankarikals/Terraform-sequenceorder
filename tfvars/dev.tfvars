@@ -35,11 +35,18 @@ create_server4 = true
 
 # Instance sizes
 
+instance_type_sequence = [
+  "t2.micro",
+  "t2.medium"
+]
 
+/*
 server1_instance_type = "t2.micro"
 server2_instance_type = "t2.medium"
 server3_instance_type = "t2.micro"
 server4_instance_type = "t2.medium"
+
+*/
 
 # Ami_id
 

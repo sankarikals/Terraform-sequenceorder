@@ -39,7 +39,7 @@ module "server1" {
   environment       = var.environment
   ami_id            = var.server1_ami_id
   associate_public_ip_address = var.associate_public_ip_address
-  instance_type     = var.server1_instance_type
+  instance_type     = element(var.instance_type_sequence, 0)
   subnet_id         = module.vpc.public_subnet_ids[0]
   security_group_id = module.sg_server1.security_group_id
   tags = var.server1_tags
@@ -79,7 +79,7 @@ module "server2" {
   environment       = var.environment
   ami_id            = var.server2_ami_id
   associate_public_ip_address = var.associate_public_ip_address
-  instance_type     = var.server2_instance_type
+  instance_type     = element(var.instance_type_sequence, 1)
   subnet_id         = module.vpc.public_subnet_ids[0]
   security_group_id = module.sg_server2.security_group_id
   tags = var.server2_tags
@@ -118,7 +118,7 @@ module "server3" {
   environment       = var.environment
   ami_id            = var.server3_ami_id
   associate_public_ip_address = var.associate_public_ip_address
-  instance_type     = var.server3_instance_type
+  instance_type     = element(var.instance_type_sequence, 2)
   subnet_id         = module.vpc.public_subnet_ids[1]
   security_group_id = module.sg_server3.security_group_id
   tags = var.server3_tags
@@ -159,7 +159,7 @@ module "server4" {
   environment       = var.environment
   ami_id            = var.server4_ami_id
   associate_public_ip_address = var.associate_public_ip_address
-  instance_type     = var.server4_instance_type
+  instance_type     = element(var.instance_type_sequence, 3)
   subnet_id         = module.vpc.public_subnet_ids[1]
   security_group_id = module.sg_server4.security_group_id
   tags = var.server4_tags

@@ -88,7 +88,12 @@ variable "server4_name" {
 
 # Instance types
 
+variable "instance_type_sequence" {
+  description = "Sequence of instance types to rotate"
+  type        = list(string)
+}
 
+/*
 variable "server1_instance_type" {
   description = "Server1 instance type"
   type        = string
@@ -108,6 +113,8 @@ variable "server4_instance_type" {
   description = "Server4 instance type"
   type        = string
 }
+
+*/
 
 # Ami_id
 
