@@ -4,5 +4,7 @@ output "server_status" {
     server2 = length(module.server2) > 0 ? module.server2[0].public_ip : "off"
     server3 = length(module.server3) > 0 ? module.server3[0].public_ip : "off"
     server4 = length(module.server4) > 0 ? module.server4[0].public_ip : "off"
+    server5 = length(module.server4) > 0 ? module.server5[0].public_ip : "off"
+    server6 = length(module.server4) > 0 ? module.server6[0].public_ip : "off"
   }
 }

@@ -64,6 +64,16 @@ variable "create_server4" {
   type        = bool
 }
 
+variable "create_server5" {
+  description = "Enable Server 4"
+  type        = bool
+}
+
+variable "create_server6" {
+  description = "Enable Server 4"
+  type        = bool
+}
+
 
 # server names
 
@@ -82,6 +92,16 @@ variable "server3_name" {
 }
 
 variable "server4_name" {
+  type = string
+  
+}
+
+variable "server5_name" {
+  type = string
+  
+}
+
+variable "server6_name" {
   type = string
   
 }
@@ -109,6 +129,16 @@ variable "server4_instance_type" {
   type        = string
 }
 
+variable "server5_instance_type" {
+  description = "Server3 instance type"
+  type        = string
+}
+
+variable "server6_instance_type" {
+  description = "Server4 instance type"
+  type        = string
+}
+
 # Ami_id
 
 variable "server1_ami_id" {
@@ -124,6 +154,15 @@ variable "server3_ami_id" {
   
 }
 variable "server4_ami_id" {
+  type = string
+  
+}
+
+variable "server5_ami_id" {
+  type = string
+  
+}
+variable "server6_ami_id" {
   type = string
   
 }
@@ -146,6 +185,16 @@ variable "server3_allowed_ports" {
 }
 
 variable "server4_allowed_ports" {
+  type = list(number)
+  
+}
+
+variable "server5_allowed_ports" {
+  type = list(number)
+  
+}
+
+variable "server6_allowed_ports" {
   type = list(number)
   
 }
@@ -173,6 +222,15 @@ variable "server3_tags" {
   
 }
 variable "server4_tags" {
+  type = map(string)
+  
+}
+
+variable "server5_tags" {
+  type = map(string)
+  
+}
+variable "server6_tags" {
   type = map(string)
   
 }

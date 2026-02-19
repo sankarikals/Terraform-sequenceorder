@@ -14,6 +14,13 @@ module "vpc" {
   availability_zones = var.availability_zones
 }
 
+
+////////////////////////////////////////////////
+
+# FIRST THREE SERVERS WITH USERDATA AND DEPENDS ON ONE ANOTHER
+
+/////////////////////
+
 # SERVER 1
 
 module "sg_server1" {
@@ -31,7 +38,7 @@ module "iam_server1" {
 }
 
 module "server1" {
-  source = "../../modules/ec2"
+  source = "../../modules/ec2/v1-withuserdata"
 
   count = var.create_server1 ? 1 : 0
 
@@ -68,7 +75,7 @@ module "iam_server2" {
 }
 
 module "server2" {
-  source = "../../modules/ec2"
+  source = "../../modules/ec2/v1-withuserdata"
 
   #count = var.create_server2 ? 1 : 0
   count = var.create_server1 && var.create_server2 ? 1 : 0
@@ -106,7 +113,7 @@ module "iam_server3" {
 }
 
 module "server3" {
-  source = "../../modules/ec2"
+  source = "../../modules/ec2/v1-withuserdata"
 
   #count = var.create_server3 ? 1 : 0\
   count = var.create_server2 && var.create_server3 ? 1 : 0
@@ -131,8 +138,13 @@ module "server3" {
 }
 
 
-# SERVER 4 (depends on 3)
+////////////////////////////////////////////////
 
+# FIRST THREE SERVERS WITHOUT USERDATA AND DEPENDS ON ONE ANOTHER
+
+/////////////////////
+
+# server 4
 
 module "sg_server4" {
   source = "../../modules/security_group"
@@ -147,7 +159,7 @@ module "iam_server4" {
 }
 
 module "server4" {
-  source = "../../modules/ec2"
+  source = "../../modules/ec2/v2-withoutuserdata"
 
   #count = var.create_server4 ? 1 : 0
   count = var.create_server3 && var.create_server4 ? 1 : 0
@@ -164,9 +176,77 @@ module "server4" {
   security_group_id = module.sg_server4.security_group_id
   tags = var.server4_tags
   iam_instance_profile = module.iam_server4.instance_profile_name
-  user_data = templatefile("${path.module}/../../userdata/server4.tftpl", {
-    environment = var.environment
-  })
+  
+  }
 
-  #user_data = file("${path.module}/userdata/server4.sh")
+
+# server5
+
+  module "sg_server5" {
+  source = "../../modules/security_group"
+  name   = var.server5_name
+  vpc_id = module.vpc.vpc_id
+  allowed_ports = var.server4_allowed_ports
 }
+
+module "iam_server5" {
+  source = "../../modules/iam-role"
+  name   = var.server5_name
+}
+
+module "server5" {
+  source = "../../modules/ec2/v2-withoutuserdata"
+
+  #count = var.create_server4 ? 1 : 0
+  count = var.create_server4 && var.create_server5 ? 1 : 0
+
+
+  #depends_on = [module.server3]
+
+  name              = var.server5_name
+  environment       = var.environment
+  ami_id            = var.server4_ami_id
+  associate_public_ip_address = var.associate_public_ip_address
+  instance_type     = var.server4_instance_type
+  subnet_id         = module.vpc.public_subnet_ids[1]
+  security_group_id = module.sg_server5.security_group_id
+  tags = var.server5_tags
+  iam_instance_profile = module.iam_server5.instance_profile_name
+  
+  }
+
+
+# server 6
+
+  module "sg_server6" {
+  source = "../../modules/security_group"
+  name   = var.server6_name
+  vpc_id = module.vpc.vpc_id
+  allowed_ports = var.server6_allowed_ports
+}
+
+module "iam_server6" {
+  source = "../../modules/iam-role"
+  name   = var.server6_name
+}
+
+module "server6" {
+  source = "../../modules/ec2/v2-withoutuserdata"
+
+  #count = var.create_server4 ? 1 : 0
+  count = var.create_server5 && var.create_server6 ? 1 : 0
+
+
+  #depends_on = [module.server3]
+
+  name              = var.server6_name
+  environment       = var.environment
+  ami_id            = var.server6_ami_id
+  associate_public_ip_address = var.associate_public_ip_address
+  instance_type     = var.server4_instance_type
+  subnet_id         = module.vpc.public_subnet_ids[1]
+  security_group_id = module.sg_server6.security_group_id
+  tags = var.server6_tags
+  iam_instance_profile = module.iam_server6.instance_profile_name
+  
+  }
