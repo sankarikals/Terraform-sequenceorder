@@ -19,64 +19,33 @@ availability_zones   = ["us-east-1a", "us-east-1b"]
 
 # server naming
 
-server1_name = "server1"
-server2_name = "server2"
-server3_name = "server3"
-server4_name = "server4"
-
-# Server enable flags
-
-
-create_server1 = true
-create_server2 = true
-create_server3 = true
-create_server4 = true
-
-
-# Instance sizes
-
-
-server1_instance_type = "t2.micro"
-server2_instance_type = "t2.medium"
-server3_instance_type = "t2.micro"
-server4_instance_type = "t2.medium"
-
-# Ami_id
-
-server1_ami_id  = "ami-0532be01f26a3de55"
-server2_ami_id  = "ami-0532be01f26a3de55"
-server3_ami_id  = "ami-0532be01f26a3de55"
-server4_ami_id  = "ami-0532be01f26a3de55"
-
-# allowed ports
-
-server1_allowed_ports = [22, 80, 443]
-server2_allowed_ports = [22, 80, 443]
-server3_allowed_ports = [22, 80, 443]
-server4_allowed_ports = [22, 80, 443]
-
-# server tags
-
-server1_tags = {
-    Name = "dev-server1-ec2"
-    environment = "dev"
-    Dependency  = "Initial"
-}
-
-server2_tags = {
-    Name = "dev-server2-ec2"
-    environment = "dev"
-    Dependency  = "Depends on server1"
-}
-
-server3_tags = {
-    Name = "dev-server3-ec2"
-    environment = "dev"
-    Dependency  = "Depends on server2"
-}
-
-server4_tags = {
-    Name = "dev-server4-ec2"
-    environment = "dev"
-    Dependency  = "Depends on server3"
-}
+servers = [
+  {
+    name = "server1"
+    ami_id = "ami-0532be01f26a3de55"
+    instance_type = "t3.micro"
+    subnet_index = 0
+    allowed_ports = [22,80,443]
+  },
+  {
+    name = "server2"
+    ami_id = "ami-0532be01f26a3de55"
+    instance_type = "t3.micro"
+    subnet_index = 0
+    allowed_ports = [22,80,443]
+  },
+  {
+    name = "server3"
+    ami_id = "ami-0532be01f26a3de55"
+    instance_type = "t3.small"
+    subnet_index = 1
+    allowed_ports = [22,443,80]
+  },
+  {
+    name = "server4"
+    ami_id = "ami-0532be01f26a3de55"
+    instance_type = "t2.medium"
+    subnet_index = 1
+    allowed_ports = [22,80,443]
+  }
+]
